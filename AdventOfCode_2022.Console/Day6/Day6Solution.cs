@@ -8,6 +8,14 @@ public class Day6Solution : ISolution
     public object SolvePartOne(string[] input)
     {
 
-        throw new NotImplementedException();
+        var communicationDevice = new CommunicationDevice();
+        return communicationDevice.FirstMarkerPosition(input.First(), 4);
+    }
+
+    public object SolvePartTwo(string[] input)
+    {
+
+        var communicationDevice = new CommunicationDevice();
+        return communicationDevice.FirstMarkerPosition(input.First(), 14);
     }
 }
