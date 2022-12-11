@@ -1,6 +1,6 @@
 ﻿using AdventOfCode_2022.Console.Day8;
 
-namespace AdventOfCode_2022.Test;
+namespace AdventOfCode_2022.Test.Day8;
 public class Day8Tests
 {
     [Fact]

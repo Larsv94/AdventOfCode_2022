@@ -7,7 +7,23 @@ public class Day9Solution : ISolution
     public int Day => 9;
     public object SolvePartOne(string[] input)
     {
+        var rope = new Rope();
+        foreach (var instruction in input)
+        {
+            rope.Move(instruction);
+        }
 
-        throw new NotImplementedException();
+        return rope.AllTailCoordinates.Count;
+    }
+
+    public object SolvePartTwo(string[] input)
+    {
+        var rope = new Rope(9);
+        foreach (var instruction in input)
+        {
+            rope.Move(instruction);
+        }
+
+        return rope.AllTailCoordinates.Count;
     }
 }

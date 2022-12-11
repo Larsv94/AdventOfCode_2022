@@ -29,7 +29,7 @@ public static class AocConsole
         }
 
         var input = GetInput(solution);
-        var solutionResultPartOne = solution.SolvePartOne(input);
+        var solutionResultPartOne = 0; // solution.SolvePartOne(input);
         var solutionResultPartTwo = solution.SolvePartTwo(input);
         System.Console.WriteLine($"The solution to part one of day{solution.Day} is:");
         System.Console.WriteLine(solutionResultPartOne);
