@@ -34,48 +34,7 @@ public class Rope
         {
             Head.Move(movement);
             UpdateTail();
-            PrintDebug(instruction, i, movement);
         }
-    }
-
-    public void PrintDebug(string instruction, int amount, Coord dir)
-    {
-        System.Console.WriteLine("============================================================");
-        System.Console.WriteLine($"Instruction: {instruction}");
-        System.Console.WriteLine($"Amount: {amount}, Direction: {dir}");
-
-        var xMin = Math.Min(-5, AllTailCoordinates.Min(x => x.X));
-        var xMax = Math.Max(5, AllTailCoordinates.Max(x => x.X));
-
-        var yMin = Math.Min(-5, AllTailCoordinates.Min(y => y.Y));
-        var yMax = Math.Max(5, AllTailCoordinates.Max(y => y.Y));
-
-        for (int Y = yMax; Y > yMin; Y--)
-        {
-            //System.Console.Write(Y);
-            for (int x = xMin; x < xMax; x++)
-            {
-                var writingCoord = new Coord(x, Y);
-                var findIndex = Array.IndexOf(Segments, writingCoord);
-                if (writingCoord == Head)
-                {
-                    System.Console.Write("H");
-                }
-                else if (findIndex != -1)
-                {
-                    System.Console.Write(findIndex + 1);
-                }
-                else
-                {
-                    System.Console.Write(AllTailCoordinates.TryGetValue(new Coord(x, Y), out var _) ? "#" : ".");
-                }
-            }
-            System.Console.Write(Environment.NewLine);
-
-        }
-
-        System.Console.WriteLine("============================================================");
-
     }
 
     private void UpdateTail()
