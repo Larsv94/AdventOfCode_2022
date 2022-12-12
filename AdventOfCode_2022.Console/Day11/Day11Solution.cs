@@ -22,7 +22,27 @@ public class Day11Solution : ISolution
             }
         }
         var mostActiveMonkeys = monkeys.OrderByDescending(m => m.Actions).Take(2).ToArray();
-        return mostActiveMonkeys.Aggregate(1, (x, y) => x * y.Actions);
+        return mostActiveMonkeys.Aggregate(1L, (x, y) => x * y.Actions);
+    }
+
+    public object SolvePartTwo(string[] input)
+    {
+        var monkeys = new List<Monkey>();
+        var monkeyStrings = GroupMonkeyStrings(input);
+        foreach (var monkeyString in monkeyStrings)
+        {
+            Monkey.Create(monkeyString, monkeys);
+        }
+        long modulo = monkeys.Aggregate(1L, (x, y) => x * y.DivisibleBy);
+        for (int i = 0; i < 10_000; i++)
+        {
+            foreach (var monkey in monkeys)
+            {
+                monkey.InspectAndThrowItemsPart2(modulo);
+            }
+        }
+        var mostActiveMonkeys = monkeys.OrderByDescending(m => m.Actions).Take(2).ToArray();
+        return mostActiveMonkeys.Aggregate(1L, (x, y) => x * y.Actions);
     }
 
     public IEnumerable<List<string>> GroupMonkeyStrings(string[] input)

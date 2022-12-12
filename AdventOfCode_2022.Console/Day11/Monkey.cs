@@ -8,21 +8,21 @@ public partial class Monkey
 
     private readonly string _action;
     private readonly string _actionAmount;
-    private readonly int _divisibleBy;
+    public readonly long DivisibleBy;
 
     private readonly int _throwToIfTrue;
     private readonly int _throwToIfFalse;
     private readonly int monkeyNmbr;
 
-    public int Actions { get; private set; } = 0;
+    public long Actions { get; private set; } = 0;
 
-    private Monkey(List<Monkey> friends, List<long> items, string action, string actionAmount, int divisibleBy, int throwToIfTrue, int throwToIfFalse, int monkeyNmbr)
+    private Monkey(List<Monkey> friends, List<long> items, string action, string actionAmount, long divisibleBy, int throwToIfTrue, int throwToIfFalse, int monkeyNmbr)
     {
         Friends = friends ?? throw new ArgumentNullException(nameof(friends));
         Items = items ?? throw new ArgumentNullException(nameof(items));
         _action = action ?? throw new ArgumentNullException(nameof(action));
         _actionAmount = actionAmount;
-        _divisibleBy = divisibleBy;
+        DivisibleBy = divisibleBy;
         _throwToIfTrue = throwToIfTrue;
         _throwToIfFalse = throwToIfFalse;
         this.monkeyNmbr = monkeyNmbr;
@@ -36,8 +36,20 @@ public partial class Monkey
             var newValue = ModifyWorry(item);
             var afterInspection = (long)Math.Floor(newValue / 3m);
 
-            var monkeyNmbrToThrowTo = afterInspection % _divisibleBy == 0 ? _throwToIfTrue : _throwToIfFalse;
+            var monkeyNmbrToThrowTo = afterInspection % DivisibleBy == 0 ? _throwToIfTrue : _throwToIfFalse;
             Friends[monkeyNmbrToThrowTo].Items.Add(afterInspection);
+        }
+        Items.Clear();
+    }
+
+    public void InspectAndThrowItemsPart2(long modulo)
+    {
+        Actions += Items.Count;
+        foreach (var item in Items)
+        {
+            var newValue = ModifyWorry(item) % modulo;
+            var monkeyNmbrToThrowTo = newValue % DivisibleBy == 0 ? _throwToIfTrue : _throwToIfFalse;
+            Friends[monkeyNmbrToThrowTo].Items.Add(newValue);
         }
         Items.Clear();
     }
@@ -47,7 +59,7 @@ public partial class Monkey
         var actionAmount = _actionAmount switch
         {
             "old" => worry,
-            _ => int.Parse(_actionAmount)
+            _ => long.Parse(_actionAmount)
         };
         return _action switch
         {
@@ -66,7 +78,7 @@ public partial class Monkey
         var operations = MonkeyOperationRegex().Match(monkeyString[2]).Groups;
         var action = operations[1].Value;
         var actionAmount = operations[2].Value;
-        var divisible = int.Parse(MonkeyDivisibleRegex().Match(monkeyString[3]).Groups[1].Value);
+        var divisible = long.Parse(MonkeyDivisibleRegex().Match(monkeyString[3]).Groups[1].Value);
         var ifTrue = int.Parse(MonkeyConditionRegex().Match(monkeyString[4]).Groups[1].Value);
         var ifFalse = int.Parse(MonkeyConditionRegex().Match(monkeyString[5]).Groups[1].Value);
 
