@@ -15,21 +15,20 @@ public class Day13Solution : ISolution
         for (int i = 0; i < pairs.Length; i++)
         {
             (var left, var right) = pairs[i];
-            if (left.CompareWithRight(right) ?? false)
+            if (left.CompareTo(right) <= 0)
             {
                 answer += i + 1;
             }
-            //else
-            //{
-            //    System.Console.WriteLine($"============={i + 1}============");
-            //    System.Console.WriteLine(left.Why());
-            //    System.Console.WriteLine("==========================");
-            //    System.Console.WriteLine("");
-            //    System.Console.WriteLine("");
-            //    System.Console.WriteLine("");
-
-            //}
         }
         return answer;
+    }
+
+    public object SolvePartTwo(string[] input)
+    {
+        var signals = input.Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => (Signal)x).ToList();
+        var dividerPackets = new Signal[] { "[[2]]", "[[6]]" };
+        signals.AddRange(dividerPackets);
+        signals.Sort();
+        return (signals.IndexOf(dividerPackets.First()) + 1) * (signals.IndexOf(dividerPackets.Last()) + 1);
     }
 }

@@ -18,8 +18,8 @@ public class SignalTests
         Signal left = leftString;
         Signal right = rightString;
 
-        var result = left.CompareWithRight(right);
+        var result = left.CompareTo(right);
 
-        result.Should().Be(expected);
+        result.Should().Be(expected ? -1 : 1);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 
 namespace AdventOfCode_2022.Console.Day13;
-public partial class Signal
+public partial class Signal : IComparable<Signal>
 {
     private readonly bool isArray;
 
@@ -20,11 +20,12 @@ public partial class Signal
         isArray = true;
     }
 
-    public bool? CompareWithRight(Signal rightSignal)
+    public int CompareTo(Signal? rightSignal)
     {
+        if (rightSignal == null) return 1;
         var result = (isArray, rightSignal.isArray) switch
         {
-            (false, false) => CompareValues(_numberValue!.Value, rightSignal._numberValue!.Value),
+            (false, false) => _numberValue!.Value.CompareTo(rightSignal._numberValue!.Value),
             (false, true) => CompareArrays(ToArray(_numberValue!.Value), rightSignal._arrayValue),
             (true, false) => CompareArrays(_arrayValue, ToArray(rightSignal._numberValue!.Value)),
             (true, true) => CompareArrays(_arrayValue, rightSignal._arrayValue),
@@ -32,24 +33,19 @@ public partial class Signal
         return result;
     }
 
-    public bool? CompareValues(int left, int right)
-    {
-        return left == right ? null : left < right;
-    }
-
-    private bool? CompareArrays(Signal[] left, Signal[] right)
+    private int CompareArrays(Signal[] left, Signal[] right)
     {
         int i = 0;
         while (i < left.Length && i < right.Length)
         {
-            var isEqual = left[i].CompareWithRight(right[i]);
-            if (isEqual is not null)
+            var isEqual = left[i].CompareTo(right[i]);
+            if (isEqual is not 0)
             {
                 return isEqual;
             }
             i++;
         }
-        return left.Length == right.Length ? null : left.Length < right.Length;
+        return left.Length.CompareTo(right.Length);
     }
 
     public static Signal[] ToArray(int val)
@@ -70,4 +66,5 @@ public partial class Signal
 
     [GeneratedRegex("(\\[)(.*)(\\])")]
     private static partial Regex IsSignalListRegex();
+
 }
