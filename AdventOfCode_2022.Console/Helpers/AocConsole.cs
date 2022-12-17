@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 
 namespace AdventOfCode_2022.Console.Helpers;
 
@@ -29,14 +30,27 @@ public static class AocConsole
         }
 
         var input = GetInput(solution);
+        var startOne = Stopwatch.GetTimestamp();
         var solutionResultPartOne = solution.SolvePartOne(input);
-        var solutionResultPartTwo = solution.SolvePartTwo(input);
+        var endOne = Stopwatch.GetElapsedTime(startOne).TotalMilliseconds;
         System.Console.WriteLine($"The solution to part one of day{solution.Day} is:");
         System.Console.WriteLine(solutionResultPartOne);
         System.Console.WriteLine();
+        System.Console.WriteLine($"It took {endOne}ms to solve Part One");
+        System.Console.WriteLine();
+        System.Console.WriteLine("  ----");
+
+
+        var startTwo = Stopwatch.GetTimestamp();
+        var solutionResultPartTwo = solution.SolvePartTwo(input);
+        var endTwo = Stopwatch.GetElapsedTime(startTwo).TotalMilliseconds;
         System.Console.WriteLine($"The solution to part two of day{solution.Day} is:");
         System.Console.WriteLine(solutionResultPartTwo);
         System.Console.WriteLine();
+        System.Console.WriteLine();
+        System.Console.WriteLine($"It took {endTwo}ms to solve Part One");
+        System.Console.WriteLine();
+        System.Console.WriteLine("  ----");
         System.Console.WriteLine("Enter any key to quit");
         System.Console.Read();
     }
