@@ -1,4 +1,7 @@
-﻿namespace AdventOfCode_2022.Console.Helpers;
+﻿using System.Linq.Expressions;
+using System.Numerics;
+
+namespace AdventOfCode_2022.Console.Helpers;
 public static class EnumerableExtensions
 {
     public static IEnumerable<IList<TSource>> Window<TSource>(this IEnumerable<TSource> source, int size)
@@ -30,5 +33,68 @@ public static class EnumerableExtensions
 
         yield return window;
 
+    }
+
+    public static (U minX, U maxX, U minY, U maxY) Bounds<T, U>(
+        this IEnumerable<T> source,
+        Expression<Func<T, U>> xExpression,
+        Expression<Func<T, U>> yExpression)
+        where U : notnull, IMinMaxValue<U>, INumber<U>
+    {
+        U minX = U.MaxValue;
+        U maxX = U.MinValue;
+        U minY = U.MaxValue;
+        U maxY = U.MinValue;
+
+        var getX = xExpression.Compile();
+        var getY = yExpression.Compile();
+
+        foreach (var item in source)
+        {
+            var x = getX(item);
+            var y = getY(item);
+
+            if (x is null || y is null)
+            {
+                continue;
+            }
+
+            minX = U.Min(minX, x);
+            maxX = U.Max(maxX, x);
+            minY = U.Min(minY, y);
+            maxY = U.Max(maxY, y);
+        }
+
+        return (minX, maxX, minY, maxY);
+    }
+
+    public static (U minX, U maxX, U minY, U maxY) Bounds<T, U>(
+        this IEnumerable<T> source,
+        Expression<Func<T, U>> xMinExpression,
+        Expression<Func<T, U>> xMaxExpression,
+        Expression<Func<T, U>> yMinExpression,
+        Expression<Func<T, U>> yMaxExpression)
+        where U : notnull, IMinMaxValue<U>, INumber<U>
+    {
+        U minX = U.MinValue;
+        U maxX = U.MaxValue;
+        U minY = U.MinValue;
+        U maxY = U.MaxValue;
+
+        var getMinX = xMinExpression.Compile();
+        var getMinY = yMinExpression.Compile();
+        var getMaxX = xMaxExpression.Compile();
+        var getMaxY = yMaxExpression.Compile();
+
+        foreach (var item in source)
+        {
+
+            minX = U.Min(minX, getMinX(item));
+            maxX = U.Max(maxX, getMaxX(item));
+            minY = U.Min(minY, getMinY(item));
+            maxY = U.Max(maxY, getMaxY(item));
+        }
+
+        return (minX, maxX, minY, maxY);
     }
 }
